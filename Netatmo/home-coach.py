@@ -4,6 +4,9 @@ from datetime import datetime
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 INFLUXDB_TOKEN = getenv("INFLUXDB_TOKEN")
 INFLUXDB_ENDPOINT = getenv("INFLUXDB_ENDPOINT")
