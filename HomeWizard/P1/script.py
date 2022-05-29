@@ -50,23 +50,23 @@ if __name__ == "__main__":
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
 
             
-            import_t1 = Decimal(data["total_power_import_t1_kwh"])
-            import_t2 = Decimal(data["total_power_import_t2_kwh"])
+            import_t1 = float(data["total_power_import_t1_kwh"])
+            import_t2 = float(data["total_power_import_t2_kwh"])
             point = Point("total_power_import")\
-                .field("total", import_t1 + import_t2)\
-                .field("t1", import_t1)\
-                .field("t2", import_t2)\
+                .field("total", Decimal(import_t1 + import_t2))\
+                .field("t1", Decimal(import_t1))\
+                .field("t2", Decimal(import_t2))\
                 .tag("unit", "kWh")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
 
             
-            export_t1 = Decimal(data["total_power_export_t1_kwh"])
-            export_t2 = Decimal(data["total_power_export_t2_kwh"])
+            export_t1 = float(data["total_power_export_t1_kwh"])
+            export_t2 = float(data["total_power_export_t2_kwh"])
             point = Point("total_power_export")\
-                .field("total", export_t1 + export_t2)\
-                .field("t1", export_t1)\
-                .field("t2", export_t2)\
+                .field("total", Decimal(export_t1 + export_t2))\
+                .field("t1", Decimal(export_t1))\
+                .field("t2", Decimal(export_t2))\
                 .tag("unit", "kWh")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
         try:
             point = Point("total_gas")\
-                .field("total", Decimal(data["total_gas_m3"]))\
+                .field("value", Decimal(data["total_gas_m3"]))\
                 .tag("unit", "M3")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
