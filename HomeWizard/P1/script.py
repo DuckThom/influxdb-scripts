@@ -40,50 +40,33 @@ if __name__ == "__main__":
         now = datetime.utcnow()
 
         try:
-            point = Point("active_power_w")\
-                .field("value", int(data["active_power_w"]))\
+            point = Point("active_power")\
+                .field("total", int(data["active_power_w"]))\
+                .field("l1", int(data["active_power_l1_w"]))\
+                .field("l2", int(data["active_power_l2_w"]))\
+                .field("l3", int(data["active_power_l3_w"]))\
                 .tag("unit", "W")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
 
-            point = Point("active_power_l1_w")\
-                .field("value", int(data["active_power_l1_w"]))\
-                .tag("unit", "W")\
-                .time(now, WritePrecision.NS)
-            write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
             
-            point = Point("active_power_l2_w")\
-                .field("value", int(data["active_power_l2_w"]))\
-                .tag("unit", "W")\
-                .time(now, WritePrecision.NS)
-            write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
-            
-            point = Point("active_power_l3_w")\
-                .field("value", int(data["active_power_l3_w"]))\
-                .tag("unit", "W")\
-                .time(now, WritePrecision.NS)
-            write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
-            
-            point = Point("total_power_import_t1")\
-                .field("value", Decimal(data["total_power_import_t1_kwh"]))\
+            import_t1 = Decimal(data["total_power_import_t1_kwh"])
+            import_t2 = Decimal(data["total_power_import_t2_kwh"])
+            point = Point("total_power_import")\
+                .field("total", import_t1 + import_t2)\
+                .field("t1", import_t1)\
+                .field("t2", import_t2)\
                 .tag("unit", "kWh")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
+
             
-            point = Point("total_power_import_t2")\
-                .field("value", Decimal(data["total_power_import_t2_kwh"]))\
-                .tag("unit", "kWh")\
-                .time(now, WritePrecision.NS)
-            write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
-            
-            point = Point("total_power_export_t1")\
-                .field("value", Decimal(data["total_power_export_t1_kwh"]))\
-                .tag("unit", "kWh")\
-                .time(now, WritePrecision.NS)
-            write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
-            
-            point = Point("total_power_export_t2")\
-                .field("value", Decimal(data["total_power_export_t2_kwh"]))\
+            export_t1 = Decimal(data["total_power_export_t1_kwh"])
+            export_t2 = Decimal(data["total_power_export_t2_kwh"])
+            point = Point("total_power_export")\
+                .field("total", export_t1 + export_t2)\
+                .field("t1", export_t1)\
+                .field("t2", export_t2)\
                 .tag("unit", "kWh")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
@@ -92,7 +75,7 @@ if __name__ == "__main__":
 
         try:
             point = Point("total_gas")\
-                .field("value", Decimal(data["total_gas_m3"]))\
+                .field("total", Decimal(data["total_gas_m3"]))\
                 .tag("unit", "M3")\
                 .time(now, WritePrecision.NS)
             write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
